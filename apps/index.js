@@ -1,3 +1,5 @@
+import { statesServices } from "./helpers/services.js"
+import { debounce, partialize, pipe } from "./operation/opretaions.js"
 const $ = document.querySelector.bind(document)
 const form = $('form')
 const input = $('#input')
@@ -9,33 +11,21 @@ const inject = $('.infect')
 const news = $('.news')
 
 
-async function getCorona(){
-    let res = await fetch('https://coronavirus.m.pipedream.net/')
-    let data = await res.json()
-    return data
-}
+const operation = pipe(
+    partialize(debounce, 500)
+)
+ 
 
-
-btn.onclick = ()=>{
-    if(!input.value ==''){
-        return new Promise((resolve, reject)=>{
-            getCorona().then(data =>{ 
-                data.rawData.find(item =>{
-                    if(item.Province_State == input.value){
-                        return resolve(item)
-                    }
-                })
-                
+const operation1 = operation(()=>
+        statesServices
+            .sumItems(input.value)
+            .then(state =>{
+                news.style.display = 'block'
+                estado.innerHTML = state.Province_State
+                death.innerHTML = state.Deaths
+                inject.innerHTML = state.Confirmed
             })
+)
 
-        }).then(state =>{
-            news.style.display = 'block'
-            estado.innerHTML = state.Province_State
-            death.innerHTML = state.Deaths
-            inject.innerHTML = state.Confirmed
-        })
-       
-        
-        
-    }
-}
+btn.onclick = ()=>{ operation1() 
+    console.log(operation1)}
