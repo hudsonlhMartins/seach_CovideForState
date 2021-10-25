@@ -5,7 +5,7 @@ export const EventEmitter = {
 
     on(event, listener){
         if(!events.has(event)) events.set(event, [])
-
+        console.log(listener)
         events.get(event).push(listener)
     },
 

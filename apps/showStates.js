@@ -11,7 +11,7 @@ const setList = (array)=>{
     </tr>
 </thead>`
 
-    States.forEach((state, index)=>{
+    array.forEach((state, index)=>{
         table += `
         <tr>
         <td>${state.pais}</td>
@@ -26,9 +26,9 @@ const setList = (array)=>{
     document.querySelector('.news').innerHTML = table
 }
 
-EventEmitter.on('stateAtual', state =>{ return new Promise((resolve, reject)=>{
+EventEmitter.on('stateAtual', state =>{ 
     States.push({'pais':state.Country_Region, 'estado': state.Province_State, 'casos': state.Confirmed, 'mortes': state.Deaths})
-}).then(setList(States)) })
+    setList(States)})
 
 
 /*
